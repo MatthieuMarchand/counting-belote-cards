@@ -3,18 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Le compte est bon</title>
+    <title>Belote</title>
 
     <link rel="stylesheet" href="css/style.css" />
 
     <script type="module" src="dist/playManager.js"></script>
   </head>
   <body>
+    <div id="div-win-streak">
+      <p>Best WinStreak: <span id="best-win-streak">14</span></p>
+      <p>WinStreak: <span id="win-streak">7</span></p>
+    </div>
+
     <p id="atout-text"></p>
     <div id="div-result-input">
       <label for="result-input">Resultat:</label>
       <input id="result-input" name="result-input" type="number" />
     </div>
+    <p id="validation"></p>
     <div id="card-container"></div>
     <button id="next-card">Suivant</button>
   </body>

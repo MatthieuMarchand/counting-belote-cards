@@ -1,30 +1,8 @@
-import { beloteCards } from "./beloteCards.js";
-import { allColors } from "./types.js";
-const numberOfCards = (Math.floor(Math.random() * (7 - 4 + 1)) + 4) * 4;
-beloteCards.sort(() => Math.random() - 0.5);
-const beloteCardsToCount = beloteCards.slice(0, numberOfCards);
-const atoutText = document.getElementById("atout-text");
-const atout = allColors[Math.floor(Math.random() * allColors.length)];
-atoutText.innerHTML = `<img src="/images/${atout}.svg" />` + atout;
-beloteCardsToCount.forEach((beloteCard) => {
-    if (beloteCard.color === atout) {
-        if (beloteCard.value === "9") {
-            beloteCard.point = 14;
-            return;
-        }
-        if (beloteCard.value === "valet") {
-            beloteCard.point = 20;
-            return;
-        }
-    }
-});
-let result = 0;
-beloteCardsToCount.forEach((beloteCard) => {
-    result = result + beloteCard.point;
-});
+import { validationHtmlElement, cardContainer, nextCard, resultInput, } from "./htmlElements.js";
+import { beloteCardsToCount, result } from "./preparation.js";
+import { initLocalItems, winStreak } from "./localStorage.js";
 document.addEventListener("DOMContentLoaded", () => {
-    const cardContainer = document.getElementById("card-container");
-    const nextCard = document.getElementById("next-card");
+    initLocalItems();
     beloteCardsToCount.forEach((beloteCard) => {
         const newDiv = document.createElement("div");
         newDiv.innerHTML = `
@@ -49,15 +27,20 @@ document.addEventListener("DOMContentLoaded", () => {
             cardContainer.lastElementChild.remove();
         }
     });
-});
-const resultInput = document.getElementById("result-input");
-resultInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        if (Number(resultInput.value) === result) {
-            resultInput.style.backgroundColor = "green";
+    resultInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            if (Number(resultInput.value) === result) {
+                validationHtmlElement.classList.remove("validation-fail");
+                validationHtmlElement.classList.add("validation-succes");
+                validationHtmlElement.innerHTML = "succes";
+                winStreak(true);
+            }
+            else {
+                validationHtmlElement.classList.remove("validation-succes");
+                validationHtmlElement.classList.add("validation-fail");
+                validationHtmlElement.innerHTML = "fail: " + result;
+                winStreak(false);
+            }
         }
-        else {
-            resultInput.style.backgroundColor = "red";
-        }
-    }
+    });
 });
